@@ -1,0 +1,18 @@
+server:
+  port: 8088
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/scholarship_dtb
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: ''
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.MySQLDialect
+      format_sql: true
+jwt:
+  secretKey: ZFc1ERqGYrHyrz0+ymwNaLU=NL6IpvTSRVlMIhXiw3V1V6HUxQEMCpRJZ9o5519l
