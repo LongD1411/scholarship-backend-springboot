@@ -10,8 +10,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface SchoolRepository extends JpaRepository<School, Integer> {
     @Query("SELECT s FROM School s " +
-            "WHERE (:keyword IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    Page<School> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
-
+            "WHERE (:countryCode IS NULL OR LOWER(s.country.code) LIKE LOWER(CONCAT('%', :countryCode, '%'))) " +
+            "AND (:keyword IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+    Page<School> findByKeyword(@Param("keyword") String keyword,
+                               @Param("countryCode") String countryCode,
+                               Pageable pageable);
     boolean existsByName(String name);
 }

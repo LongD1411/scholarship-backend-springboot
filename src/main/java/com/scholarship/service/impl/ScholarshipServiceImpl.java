@@ -47,8 +47,8 @@ public class ScholarshipServiceImpl implements ScholarshipService {
     }
 
     @Override
-    public Page<ScholarshipResponse> searchScholarshipResponsePage(String keyword, Pageable pageable) {
-        return scholarshipRepository.findByKeyword(keyword, pageable).map(scholarshipMapper::toScholarshipResponse);
+    public Page<ScholarshipResponse> searchScholarshipResponsePage(String keyword,String countryCode,String fosId, Pageable pageable) {
+        return scholarshipRepository.findByKeyword(keyword,countryCode,fosId, pageable).map(scholarshipMapper::toScholarshipResponse);
     }
 
     @Override

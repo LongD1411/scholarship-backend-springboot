@@ -36,8 +36,8 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-    public Page<SchoolResponse> searchSchoolResponsePage(String keyword, Pageable pageable) {
-        return schoolRepository.findByKeyword(keyword, pageable).map(schoolMapper::toSchoolResponse);
+    public Page<SchoolResponse> searchSchoolResponsePage(String keyword,String countryCode, Pageable pageable) {
+        return schoolRepository.findByKeyword(keyword,countryCode, pageable).map(schoolMapper::toSchoolResponse);
     }
 
     @Override

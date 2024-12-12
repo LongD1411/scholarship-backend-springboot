@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface ScholarshipService {
     ScholarshipResponse createScholarship(ScholarshipRequest request);
-    Page<ScholarshipResponse> searchScholarshipResponsePage(String keyword, Pageable pageable);
+    Page<ScholarshipResponse> searchScholarshipResponsePage(String keyword,String countryCode,String fosId, Pageable pageable);
     void deleteScholarship(int id);
     ScholarshipResponse updateScholarship(ScholarshipRequest request);
     void createScholarships(ScholarshipRequest[] request);

@@ -19,6 +19,8 @@ public interface ScholarshipMapper {
     @Mapping(target = "fieldOfStudyName",source = "fieldOfStudy.name")
     @Mapping(target = "schoolId",source = "school.id")
     @Mapping(target = "fieldOfStudyId",source = "fieldOfStudy.id")
+    @Mapping(target = "countryName",source = "school.country.name")
+    @Mapping(target = "schoolRank", source = "school.rankValue")
     ScholarshipResponse toScholarshipResponse(Scholarship scholarship);
 
 

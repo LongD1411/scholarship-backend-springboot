@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface SchoolService {
     SchoolResponse createSchool(SchoolRequest request);
-    Page<SchoolResponse> searchSchoolResponsePage(String keyword, Pageable pageable);
+    Page<SchoolResponse> searchSchoolResponsePage(String keyword,String coutryCode, Pageable pageable);
     void deleteSchool(int id);
     SchoolResponse updateSchool(SchoolRequest request);
     SchoolResponse getSchool(int id);

@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,53 +28,44 @@ public class ScholarshipControlller {
         return  ApiResponse.<ScholarshipResponse>builder().result(result).build();
     }
     @GetMapping
-    public ApiResponse<ScholarshipResponse> searchCountries(
+    public ApiResponse<ScholarshipResponse> searchScholarship(
             @RequestParam(required = false,value = "keyword") String keyword,
             @RequestParam(defaultValue = "1",required = false,value = "page") int page,
             @RequestParam(defaultValue = "10",required = false, value = "limit") int limit,
-            @RequestParam(defaultValue = "-1",required = false, value = "id") int id) {
+            @RequestParam(defaultValue = "-1",required = false, value = "id") int id,
+            @RequestParam(required = false, value = "countryCode") String countryCode,
+            @RequestParam(defaultValue = "",required = false, value = "discipline") String fosId) {
       if(id >0){
           var result = scholarshipService.getScholarship(id);
           return ApiResponse.<ScholarshipResponse>builder().result(result).build();
       }else{
-          Pageable pageable = PageRequest.of(page-1, limit);
-          var result = scholarshipService.searchScholarshipResponsePage(keyword, pageable);
+          if(fosId.isEmpty()){
+              fosId = "100";
+          }
+          Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(Sort.Order.desc("endDate")));
+          var result = scholarshipService.searchScholarshipResponsePage(keyword,countryCode,fosId, pageable);
           return ApiResponse.<ScholarshipResponse>builder().results(result.getContent())
                   .totalPages(result.getTotalPages())
                   .totalItems((int) result.getTotalElements())
                   .build();
       }
     }
-//    @PostMapping("/all")
-//    public ApiResponse<ScholarshipResponse> createScholarships(@Valid @RequestBody ScholarshipRequest[] request){
-//        scholarshipService.createScholarships(request);
-//        return  ApiResponse.<ScholarshipResponse>builder().message("ok").build();
-//    }
     @DeleteMapping
     public ApiResponse<Void> deleteScholarship(@RequestParam(value = "id") int id){
         scholarshipService.deleteScholarship(id);
         return ApiResponse.<Void>builder().message("ok").build();
     }
     @PutMapping
-    public ApiResponse<ScholarshipResponse> updateScholarship(@Valid @RequestBody ScholarshipRequest request){
+    public ApiResponse<ScholarshipResponse> updateScholarship(@Valid @RequestBody ScholarshipRequest request) {
         var result = scholarshipService.updateScholarship(request);
         return ApiResponse.<ScholarshipResponse>builder().result(result).build();
     }
-    @GetMapping("/expiring-scholarship")
-    public ApiResponse<Long> countExpiringScholarships(){
-        return ApiResponse.<Long>builder().result(scholarshipService.expiringScholarships()).build();
-    }
-    @GetMapping("/scholarships-updated-last-week")
-    public  ApiResponse<Long> countScholarshipsUpdatedLastWeek() {
-       return ApiResponse.<Long>builder().result(scholarshipService.scholarshipsUpdatedWithinLastWeek()).build();
-    }
+
+
+
     @GetMapping("/scholarships-by-month")
     public ApiResponse<Map<String,Long>> countByMonth(){
         return ApiResponse.<Map<String, Long>>builder().result(scholarshipService.getScholarshipsCountByMonth()).build();
-    }
-    @GetMapping("/scholarships-top-countries")
-    public ApiResponse<Object> getTop10CountriesByScholarshipCount() {
-        return ApiResponse.<Object>builder().results(scholarshipService.getTop10CountriesByScholarshipCount()).build();
     }
     @GetMapping("/scholarships-top-field-of-study")
     public ApiResponse<Object> getTop5FieldOfStudyByScholarshipCount() {
@@ -82,5 +74,20 @@ public class ScholarshipControlller {
     @GetMapping("/top-search")
     public ApiResponse<SearchKeywordResponse> getTop10Search() {
         return ApiResponse.<SearchKeywordResponse>builder().results(searchKeywordService.getTop10SearchKeyword()).build();
+    }
+    @GetMapping("/expiring-scholarship")
+    public ApiResponse<Long> countExpiringScholarships(){
+        return ApiResponse.<Long>builder().result(scholarshipService.expiringScholarships()).build();
+    }
+
+    @GetMapping("/scholarships-updated-last-week")
+    public ApiResponse<Long> countScholarshipsUpdatedLastWeek() {
+        return ApiResponse.<Long>builder().result(scholarshipService.scholarshipsUpdatedWithinLastWeek()).build();
+    }
+
+
+    @GetMapping("/scholarships-top-countries")
+    public ApiResponse<Object> getTop10CountriesByScholarshipCount() {
+        return ApiResponse.<Object>builder().results(scholarshipService.getTop10CountriesByScholarshipCount()).build();
     }
 }

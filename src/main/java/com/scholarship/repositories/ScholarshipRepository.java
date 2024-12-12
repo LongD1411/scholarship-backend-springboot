@@ -16,10 +16,14 @@ public interface ScholarshipRepository  extends JpaRepository<Scholarship,Intege
             "WHERE (:keyword IS NULL OR " +
             "LOWER(s.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(s.description) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "OR LOWER(s.gpa) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "OR LOWER(s.school.name) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    Page<Scholarship> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
-
+            "OR LOWER(CAST(s.gpa AS string)) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(s.school.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            "AND (:fosId IS NULL OR s.fieldOfStudy.id = :fosId)" +
+            "AND (:countryCode IS NULL OR LOWER(s.school.country.code) LIKE LOWER(CONCAT('%', :countryCode, '%')))")
+    Page<Scholarship> findByKeyword(@Param("keyword") String keyword,
+                                    @Param("countryCode") String countryCode,
+                                    @Param("fosId") String fosId ,
+                                    Pageable pageable);
     @Query(value = "SELECT COUNT(*) FROM scholarship WHERE end_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 2 WEEK)", nativeQuery = true)
     long countExpiringScholarships();
     @Query("SELECT COUNT(s) FROM Scholarship s WHERE s.updatedAt > :oneWeekAgo")

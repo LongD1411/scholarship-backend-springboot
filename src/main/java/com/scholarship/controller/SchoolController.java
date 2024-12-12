@@ -33,7 +33,8 @@ public class SchoolController {
             @RequestParam(required = false, value = "keyword") String keyword,
             @RequestParam(defaultValue = "1", required = false, value = "page") int page,
             @RequestParam(defaultValue = "10", required = false, value = "limit") int limit,
-            @RequestParam(defaultValue = "-1",required = false, value = "id") int id) {
+            @RequestParam(defaultValue = "-1",required = false, value = "id") int id,
+            @RequestParam(required = false, value = "countryCode") String countryCode){
         if(id > 0){
             var result = schoolService.getSchool(id);
             return ApiResponse.<SchoolResponse>builder().result(result).build();
@@ -42,7 +43,7 @@ public class SchoolController {
                 return ApiResponse.<SchoolResponse>builder().build();
             }
             Pageable pageable = PageRequest.of(page - 1, limit);
-            var result = schoolService.searchSchoolResponsePage(keyword, pageable);
+            var result = schoolService.searchSchoolResponsePage(keyword,countryCode, pageable);
             return ApiResponse.<SchoolResponse>builder().results(result.getContent())
                     .totalPages(result.getTotalPages())
                     .totalItems((int) result.getTotalElements())

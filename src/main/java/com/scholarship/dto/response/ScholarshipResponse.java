@@ -22,8 +22,10 @@ public class ScholarshipResponse {
     private Boolean isActive = true;
     private int quantity;
     private String schoolName;
+    private String countryName;
     private String fieldOfStudyName;
     private String schoolId;
+    private String schoolRank;
     private String fieldOfStudyId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -22,11 +22,6 @@ public class CountryController {
       var result =   countryService.createCountry(requests);
       return ApiResponse.<CountryResponse>builder().result(result).build();
     }
-//    @PostMapping("/abcd")
-//    public ApiResponse<Void> createCountry(@RequestBody CountryRequest[] requests){
-//       countryService.createCountries(requests);
-//        return ApiResponse.<Void>builder().message("ok").build();
-//    }
 
     @GetMapping
     public ApiResponse<CountryResponse> searchCountries(
@@ -46,11 +41,7 @@ public class CountryController {
                     .build();
         }
     }
-    @GetMapping("/all")
-    public ApiResponse<CountryResponse> getAllCountries(){
-        var results = countryService.getAllCoutries();
-        return ApiResponse.<CountryResponse>builder().results(results).build();
-    }
+
     @DeleteMapping
     public ApiResponse<Void> deleteCountry(@RequestParam(value = "code") String id){
         countryService.deleteCountry(id);
@@ -60,5 +51,14 @@ public class CountryController {
     public ApiResponse<CountryResponse> updateCountry(@Valid @RequestBody CountryRequest request){
         var result = countryService.updateCountry(request);
         return  ApiResponse.<CountryResponse>builder().result(result).build();
+    }
+
+
+    
+
+    @GetMapping("/all")
+    public ApiResponse<CountryResponse> getAllCountries(){
+        var results = countryService.getAllCoutries();
+        return ApiResponse.<CountryResponse>builder().results(results).build();
     }
 }
