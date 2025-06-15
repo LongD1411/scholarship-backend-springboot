@@ -18,7 +18,7 @@ public interface ScholarshipRepository  extends JpaRepository<Scholarship,Intege
             "OR LOWER(s.description) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(CAST(s.gpa AS string)) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(s.school.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
-            "AND (:fosId IS NULL OR s.fieldOfStudy.id = :fosId)" +
+            "AND (:fosId = 100 OR s.fieldOfStudy.id = :fosId)" +
             "AND (:countryCode IS NULL OR LOWER(s.school.country.code) LIKE LOWER(CONCAT('%', :countryCode, '%')))")
     Page<Scholarship> findByKeyword(@Param("keyword") String keyword,
                                     @Param("countryCode") String countryCode,
@@ -31,12 +31,12 @@ public interface ScholarshipRepository  extends JpaRepository<Scholarship,Intege
 
     @Query("SELECT MONTH(s.startDate) AS month, YEAR(s.startDate) AS year, COUNT(s) AS total " +
             "FROM Scholarship s " +
-            "WHERE YEAR(s.startDate) = 2024 " +
+            "WHERE YEAR(s.startDate) = 2025 " +
             "GROUP BY YEAR(s.startDate), MONTH(s.startDate) " +
             "ORDER BY month")
     List<Object[]> countScholarshipsByMonth();
 
-    @Query("SELECT s.school.country, COUNT(s) as scholarshipCount " +
+    @Query("SELECT s.school.country.name, COUNT(s) as scholarshipCount " +
             "FROM Scholarship s " +
             "GROUP BY s.school.country " +
             "ORDER BY scholarshipCount DESC " +

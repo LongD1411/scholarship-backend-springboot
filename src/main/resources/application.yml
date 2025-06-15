@@ -5,7 +5,7 @@ spring:
     url: jdbc:mysql://localhost:3306/scholarship_dtb
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: ''
+    password: '123456'
   jpa:
     show-sql: true
     hibernate:
@@ -14,5 +14,16 @@ spring:
       hibernate:
       dialect: org.hibernate.dialect.MySQLDialect
       format_sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: longvipzm@gmail.com
+    password: etjohqphpuyhdamm
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 jwt:
   secretKey: ZFc1ERqGYrHyrz0+ymwNaLU=NL6IpvTSRVlMIhXiw3V1V6HUxQEMCpRJZ9o5519l

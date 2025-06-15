@@ -17,6 +17,7 @@ import com.scholarship.repositories.InvalidatedTokenRepository;
 import com.scholarship.repositories.UserRepository;
 import com.scholarship.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -39,9 +41,10 @@ public class AuthServiceImpl implements AuthService {
     private String secretKey;
     @Override
     public AuthResponse authenticate(AuthRequest request) {
-        Optional<User> optional = userRepository.findByUserName(request.getUserName());
+        Optional<User> optional = userRepository.findByEmail(request.getEmail());
         if(optional.isEmpty()) throw  new AppException(ErrorCode.USER_NOT_EXISTED);
         User user = optional.get();
+        if(!user.isVerified()) throw new AppException(ErrorCode.ACCOUNT_NOT_VERIFY);
         boolean matchPassword = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!matchPassword) throw new AppException(ErrorCode.UNAUTHENTICATED);
         var token = generateToken(user);
@@ -58,7 +61,8 @@ public class AuthServiceImpl implements AuthService {
         );
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .jwtID(UUID.randomUUID().toString())
-                .subject(user.getUserName())
+                .claim("user_name",user.getFullName())
+                .subject(user.getEmail())
                 .expirationTime(expiredTime)
                 .issueTime(issueTime)
                 .claim("scope",buildScope(user))
@@ -75,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
 
     private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        user.getRoles().forEach(role -> stringJoiner.add("ROLE_" +role.getName()));
+        stringJoiner.add("ROLE_" + user.getRole().getName());
         return stringJoiner.toString();
     }
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {

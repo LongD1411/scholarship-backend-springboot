@@ -26,6 +26,7 @@ public class ScholarshipResponse {
     private String fieldOfStudyName;
     private String schoolId;
     private String schoolRank;
+    private String schoolLogo;
     private String fieldOfStudyId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

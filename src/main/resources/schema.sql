@@ -1,0 +1,18 @@
+create table account_verify_token (expiry_date datetime(6), id bigint not null auto_increment, token varchar(255), user_id varchar(255), primary key (id)) engine=InnoDB;
+create table country (code varchar(255) not null, continent varchar(255), name varchar(255), primary key (code)) engine=InnoDB;
+create table field_of_study (id integer not null auto_increment, name varchar(255) not null, primary key (id)) engine=InnoDB;
+create table invalidated_token (expiry_time datetime(6), id varchar(255) not null, primary key (id)) engine=InnoDB;
+create table roles (name varchar(255) not null, primary key (name)) engine=InnoDB;
+create table scholarship (end_date date, field_of_study_id integer, id integer not null auto_increment, is_active bit, quantity integer not null, school_id integer, start_date date, created_at datetime(6), updated_at datetime(6), description TEXT, eligibility TEXT, gpa varchar(255), grant_amount varchar(255), name TEXT not null, url TEXT, primary key (id)) engine=InnoDB;
+create table school (id integer not null auto_increment, rank_value integer not null, country_code varchar(255), description TEXT, logo varchar(255), name varchar(255) not null, provider varchar(255), primary key (id)) engine=InnoDB;
+create table search_keyword (count bigint, id bigint not null auto_increment, timestamp datetime(6), keyword varchar(255), primary key (id)) engine=InnoDB;
+create table user_auth_providers (id bigint not null auto_increment, provider varchar(255) not null, provider_id varchar(255) not null, user_id varchar(255) not null, primary key (id)) engine=InnoDB;
+create table users (date_of_birth date, is_active bit, is_verified bit, email varchar(255), id varchar(255) not null, password varchar(255), role_name varchar(255), primary key (id)) engine=InnoDB;
+alter table account_verify_token add constraint UK5hv86nqn3ip8tgpedk8v369sf unique (user_id);
+alter table field_of_study add constraint UKhgi2rosaa4gtrnjolj2yjncoh unique (name);
+alter table account_verify_token add constraint FK3srnglck2ofmil7sqrbl4rfns foreign key (user_id) references users (id);
+alter table scholarship add constraint FK5tsejqqwn5yvjot157byyjauv foreign key (field_of_study_id) references field_of_study (id);
+alter table scholarship add constraint FKba2wm2qne8d7mbbujgyjln2he foreign key (school_id) references school (id);
+alter table school add constraint FKmqxvxmp5t47tn4ekto94fdbpx foreign key (country_code) references country (code);
+alter table user_auth_providers add constraint FK36nn9pmlugyb6c34h3vakuai foreign key (user_id) references users (id);
+alter table users add constraint FK6e7f1kfvvn2k48olww485qvo3 foreign key (role_name) references roles (name);

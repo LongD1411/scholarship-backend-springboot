@@ -20,6 +20,8 @@ public enum ErrorCode {
     SCHOOL_NOT_EXISTED(10010, "School not existed", HttpStatus.NOT_FOUND),
     FIELD_OF_STUDY_NOT_EXISTED(10010, "Field of study not existed", HttpStatus.NOT_FOUND),
     SCHOLARSHIP_NOT_EXISTED(10011, "Scholarship not existed", HttpStatus.NOT_FOUND),
+    ACCOUNT_NOT_VERIFY(10012, "Account not verify", HttpStatus.BAD_REQUEST),
+    SCHOLARSHIP_EXISTED(10013, "Scholarship existed", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
