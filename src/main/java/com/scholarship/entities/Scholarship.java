@@ -33,6 +33,7 @@ public class Scholarship {
 
     @Column(columnDefinition = "TEXT")
     private String url;
+
     private String grantAmount;
 
     private String gpa;

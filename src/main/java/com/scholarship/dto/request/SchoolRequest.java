@@ -19,4 +19,9 @@ public class SchoolRequest {
     private int rankValue;
     @NotBlank(message = "Country code  is required")
     private String countryCode;
+    private int students;
+    private int fieldOfStudy;
+    private String type;
+    private String url;
+    private String topReason;
 }

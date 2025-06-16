@@ -23,6 +23,13 @@ public class School {
     @Column(columnDefinition = "TEXT")
     private String description;
     private int rankValue;
+    private int students;
+    @Column(name = "field_of_study")
+    private Integer fieldOfStudy;
+    private String type;
+    private String url;
+    @Column(name = "top_reason",columnDefinition = "TEXT")
+    private String topReason;
     @ManyToOne
     private Country country;
     @OneToMany(mappedBy = "school", cascade = {

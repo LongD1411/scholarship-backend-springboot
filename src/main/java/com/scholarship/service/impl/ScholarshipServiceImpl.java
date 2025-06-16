@@ -57,20 +57,30 @@ public class ScholarshipServiceImpl implements ScholarshipService {
         scholarshipRepository.deleteById(id);
     }
 
-    @Override
     @Transactional
+    @Override
     public ScholarshipResponse updateScholarship(ScholarshipRequest request) {
-        Scholarship oldScholarship = scholarshipRepository.findById(request.getId()).orElseThrow(() -> new AppException(ErrorCode.SCHOLARSHIP_NOT_EXISTED));
-        School newSchool = schoolRepository.findById(request.getSchoolId()).orElseThrow(() -> new AppException(ErrorCode.SCHOOL_NOT_EXISTED));
-        FieldOfStudy newFieldOfStudy = fieldOfStudyRepository.findById(request.getFieldOfStudyId()).orElseThrow(() -> new AppException(ErrorCode.FIELD_OF_STUDY_NOT_EXISTED));
-        Scholarship newScholarship = scholarshipMapper.toScholarship(request);
-        newScholarship.setId(request.getId());
-        newScholarship.setSchool(newSchool);
-        newScholarship.setCreatedAt(oldScholarship.getCreatedAt());
-        newScholarship.setUpdatedAt(LocalDateTime.now());
-        newScholarship.setFieldOfStudy(newFieldOfStudy);
-        scholarshipRepository.save(newScholarship);
-        return scholarshipMapper.toScholarshipResponse(newScholarship);
+        Scholarship scholarship = scholarshipRepository.findById(request.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.SCHOLARSHIP_NOT_EXISTED));
+        School school = schoolRepository.findById(request.getSchoolId())
+                .orElseThrow(() -> new AppException(ErrorCode.SCHOOL_NOT_EXISTED));
+        FieldOfStudy fieldOfStudy = fieldOfStudyRepository.findById(request.getFieldOfStudyId())
+                .orElseThrow(() -> new AppException(ErrorCode.FIELD_OF_STUDY_NOT_EXISTED));
+
+        scholarship.setName(request.getName());
+        scholarship.setDescription(request.getDescription());
+        scholarship.setEligibility(request.getEligibility());
+        scholarship.setUrl(request.getUrl());
+        scholarship.setGrantAmount(request.getGrantAmount());
+        scholarship.setGpa(request.getGpa());
+        scholarship.setStartDate(request.getStartDate());
+        scholarship.setEndDate(request.getEndDate());
+        scholarship.setIsActive(request.getIsActive());
+        scholarship.setQuantity(request.getQuantity());
+        scholarship.setSchool(school);
+        scholarship.setFieldOfStudy(fieldOfStudy);
+
+        return scholarshipMapper.toScholarshipResponse(scholarship);
     }
 
     @Override

@@ -19,11 +19,14 @@ public class SchoolResponse {
     private String provider;
 
     private String description;
-
+    private String topReason;
     private int rankValue;
 
     private String countryName;
-
+    private int students;
+    private int fieldOfStudy;
+    private String type;
+    private String url;
     private String countryCode;
     private List<ScholarshipResponse> scholarships;
 }
